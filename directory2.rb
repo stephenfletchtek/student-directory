@@ -19,31 +19,25 @@ def print_header
   puts "-------------"
 end
 
-# add index number
-def print(names, search="")
-  if search.to_i != 0
-    names.each_with_index do |name, index|
-      puts "#{index + 1}. #{name[:name][0 , search.to_i]} (#{name[:cohort]} cohort)"
-    end
-  elsif search != ""
-    names.each_with_index do |name, ind|
-      if name[:name][0] == search
-        puts "#{ind + 1}. #{name[:name]} (#{name[:cohort]} cohort)"
+# grouped by cohort for question 8
+def print(names)
+  # cohort list
+  cohort_list = names.each.map { |item| item[:cohort]}
+  #unique cohorts only
+  cohort_list = cohort_list.uniq
+  # by cohort
+  cohort_list.each do |cohort|
+    puts "#{cohort} cohort:"
+    names.each_with_index do |record, ind|
+      # display if in cohort
+      if record[:cohort] == cohort
+        puts "#{ind + 1}. #{record[:name]}"
+        str = "Hobby: #{record[:hobby]}, Country: #{record[:country]}, Height: #{record[:height]}"
+        # account for index number to have varying length
+        num = (ind + 1).to_s.length.to_i * 2 + 4
+        # align hobbies under first line 
+        puts str.center(str.length + num)
       end
-    end  
-  else
-
-    # while loop technique 
-    index = 0
-    while index < names.length()
-      record = names[index]
-      puts "#{index + 1}. #{record[:name]} (#{record[:cohort]} cohort)"
-      str = "Hobby: #{record[:hobby]} Country: #{record[:country]} Height: #{record[:height]}"
-      # account for index number to have varying length
-      num = (index + 1).to_s.length.to_i * 2 + 4
-      # align hobbies under first line 
-      puts str.center(str.length + num)
-      index += 1
     end
   end
 end
@@ -87,14 +81,7 @@ def input_students
   students
 end
 
-def do_filter
-  puts "Enter a number to chop length"
-  puts "Enter an intitial to search"
-  puts "Or leave blank to show all names"
-  return gets.chomp
-end
-
 students = input_students
 print_header
-print(students, do_filter)
+print(students)
 print_footer(students)
