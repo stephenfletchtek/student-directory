@@ -31,9 +31,18 @@ def print(names, search="")
       end
     end  
   else
-    names.each_with_index do |name, index|
-      puts "#{index + 1}. #{name[:name]} (#{name[:cohort]} cohort)"
+
+    # while loop technique 
+    index = 0
+    while index < names.length()
+      puts "#{index + 1}. #{names[index][:name]} (#{names[index][:cohort]} cohort)"
+      index += 1
     end
+
+    # names.each {} technique
+    # names.each_with_index do |name, index|
+    #   puts "#{index + 1}. #{name[:name]} (#{name[:cohort]} cohort)"
+    # end
   end
 end
 
