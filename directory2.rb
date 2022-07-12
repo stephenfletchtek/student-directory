@@ -1,16 +1,17 @@
 # let's put all students into an array
+# hobby, country, height
 students = [
-{name: "Dr. Hannibal Lecter", cohort: :november},
-{name: "Darth Vader", cohort: :november},
-{name: "Nurse Ratched", cohort: :november},
-{name: "Michael Corleone", cohort: :november},
-{name: "Alex DeLarge", cohort: :november},
-{name: "The Wicked Witch of the West", cohort: :november},
-{name: "Terminator", cohort: :november},
-{name: "Freddy Krueger", cohort: :november},
-{name: "The Joker", cohort: :november},
-{name: "Joffrey Baratheon", cohort: :november},
-{name: "Norman Bates", cohort: :november}
+{name: "Dr. Hannibal Lecter", cohort: :november, hobby: :chess, country: :UK, height: "2m"},
+{name: "Darth Vader", cohort: :november, hobby: "", country: "", height: ""},
+{name: "Nurse Ratched", cohort: :november, hobby: "", country: "", height: ""},
+{name: "Michael Corleone", cohort: :november, hobby: "", country: "", height: ""},
+{name: "Alex DeLarge", cohort: :november, hobby: "", country: "", height: ""},
+{name: "The Wicked Witch of the West", cohort: :november, hobby: "", country: "", height: ""},
+{name: "Terminator", cohort: :november, hobby: "", country: "", height: ""},
+{name: "Freddy Krueger", cohort: :november, hobby: "", country: "", height: ""},
+{name: "The Joker", cohort: :november, hobby: "", country: "", height: ""},
+{name: "Joffrey Baratheon", cohort: :november, hobby: "", country: "", height: ""},
+{name: "Norman Bates", cohort: :november, hobby: "", country: "", height: ""}
 ]
 
 def print_header
@@ -35,7 +36,9 @@ def print(names, search="")
     # while loop technique 
     index = 0
     while index < names.length()
-      puts "#{index + 1}. #{names[index][:name]} (#{names[index][:cohort]} cohort)"
+      record = names[index]
+      puts "#{index + 1}. #{record[:name]} (#{record[:cohort]} cohort)"
+      puts = "Hobby: #{record[:hobby]} Country: #{record[:country]} Height: #{record[:height]}"
       index += 1
     end
 
@@ -60,7 +63,7 @@ def input_students
   # while the name is not empty, repeat this code
   while !name.empty? do
     # add student hash to the array
-    students << {name: name, cohort: :november}
+    students << {name: name, cohort: :november, hobby: :chess, country: :UK, height: "2m"}
     puts "Now we have #{students.count} students"
     # get another name from the user
     name = gets.chomp
