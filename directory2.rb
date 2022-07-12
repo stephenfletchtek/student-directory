@@ -38,7 +38,11 @@ def print(names, search="")
     while index < names.length()
       record = names[index]
       puts "#{index + 1}. #{record[:name]} (#{record[:cohort]} cohort)"
-      puts = "Hobby: #{record[:hobby]} Country: #{record[:country]} Height: #{record[:height]}"
+      str = "Hobby: #{record[:hobby]} Country: #{record[:country]} Height: #{record[:height]}"
+      # account for inxed number to have varying length
+      num = (index + 1).to_s.length.to_i * 2 + 4
+      # align hobbies under first line 
+      puts str.center(str.length + num)
       index += 1
     end
 
