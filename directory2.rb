@@ -20,7 +20,7 @@ def print_header
 end
 
 # grouped by cohort for question 8
-def print(names)
+def print_out(names)
   # cohort list
   cohort_list = names.each.map { |item| item[:cohort]}
   #unique cohorts only
@@ -75,7 +75,9 @@ def input_students
     students << student
     puts "Now we have #{students.count} students"
     puts "Add another student? [Y/n]"
-    input = gets.chomp
+    # question 10 alternative to gets.chomp
+    input = gets
+    (input = input[0,input.length - 1]) if input[-1] == "\n"
     break if input.upcase == "N"
 
   end
@@ -85,5 +87,5 @@ end
 
 students = input_students
 print_header
-print(students)
+print_out(students)
 print_footer(students)
