@@ -20,12 +20,16 @@ end
 
 # add index number
 def print(names, search="")
-  if search != ""
+  if search.to_i != 0
+    names.each_with_index do |name, index|
+      puts "#{index + 1}. #{name[:name][0 , search.to_i]} (#{name[:cohort]} cohort)"
+    end
+  elsif search != ""
     names.each_with_index do |name, ind|
       if name[:name][0] == search
         puts "#{ind + 1}. #{name[:name]} (#{name[:cohort]} cohort)"
       end
-    end
+    end  
   else
     names.each_with_index do |name, index|
       puts "#{index + 1}. #{name[:name]} (#{name[:cohort]} cohort)"
@@ -56,12 +60,14 @@ def input_students
   students
 end
 
-def get_initial
-  puts "Enter intitial to search - leave blank to show all names"
+def do_filter
+  puts "Enter a number to chop length"
+  puts "Enter an intitial to search"
+  puts "Or leave blank to show all names"
   return gets.chomp
 end
 
 # students = input_students
 print_header
-print(students, get_initial)
+print(students, do_filter)
 print_footer(students)
