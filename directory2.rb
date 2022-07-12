@@ -21,24 +21,31 @@ end
 
 # grouped by cohort for question 8
 def print_out(names)
-  # cohort list
-  cohort_list = names.each.map { |item| item[:cohort]}
-  #unique cohorts only
-  cohort_list = cohort_list.uniq
-  # by cohort
-  cohort_list.each do |cohort|
-    puts "#{cohort} cohort:"
-    names.each_with_index do |record, ind|
-      # display if in cohort
-      if record[:cohort] == cohort
-        puts "#{ind + 1}. #{record[:name]}"
-        str = "Hobby: #{record[:hobby]}, Country: #{record[:country]}, Height: #{record[:height]}"
-        # account for index number to have varying length
-        num = (ind + 1).to_s.length.to_i * 2 + 4
-        # align hobbies under first line 
-        puts str.center(str.length + num)
+  # q12 only print if some students are entered
+  do_print = false
+  names.each { |student| do_print = true if student[:name] != :blank }
+  if do_print == true
+    # cohort list
+    cohort_list = names.each.map { |item| item[:cohort]}
+    #unique cohorts only
+    cohort_list = cohort_list.uniq
+    # by cohort
+    cohort_list.each do |cohort|
+      puts "#{cohort} cohort:"
+      names.each_with_index do |record, ind|
+        # display if in cohort
+        if record[:cohort] == cohort
+          puts "#{ind + 1}. #{record[:name]}"
+          str = "Hobby: #{record[:hobby]}, Country: #{record[:country]}, Height: #{record[:height]}"
+          # account for index number to have varying length
+          num = (ind + 1).to_s.length.to_i * 2 + 4
+          # align hobbies under first line 
+          puts str.center(str.length + num)
+        end
       end
     end
+  else
+    puts "No student records to show"
   end
 end
 
