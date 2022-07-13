@@ -21,29 +21,27 @@ def print_header
   puts "-------------"
 end
 
+def print_cohort(cohort)
+  puts "#{cohort} cohort:"
+  @students.each_with_index do |record, ind|
+    # display if in cohort
+    if record[:cohort] == cohort
+      puts "#{ind + 1}. #{record[:name]}"
+      str = "Hobby: #{record[:hobby]}, Country: #{record[:country]}, Height: #{record[:height]}"
+      # account for index number to have varying length
+      num = (ind + 1).to_s.length.to_i * 2 + 4
+      # align hobbies under first line 
+      puts str.center(str.length + num)
+    end
+  end
+end
+
 # grouped by cohort for question 8
 def print_students_list
   # q12 only print if 'students' list is not empty
   if @students.length != 0
-    # cohort list
-    cohort_list = @students.each.map { |item| item[:cohort]}
-    #unique cohorts only
-    cohort_list = cohort_list.uniq
-    # by cohort
-    cohort_list.each do |cohort|
-      puts "#{cohort} cohort:"
-      @students.each_with_index do |record, ind|
-        # display if in cohort
-        if record[:cohort] == cohort
-          puts "#{ind + 1}. #{record[:name]}"
-          str = "Hobby: #{record[:hobby]}, Country: #{record[:country]}, Height: #{record[:height]}"
-          # account for index number to have varying length
-          num = (ind + 1).to_s.length.to_i * 2 + 4
-          # align hobbies under first line 
-          puts str.center(str.length + num)
-        end
-      end
-    end
+    cohort_list = @students.each.map { |item| item[:cohort]}.uniq
+    cohort_list.each { |cohort| print_cohort(cohort) }
   else
     puts "No student records to show"
   end
@@ -55,35 +53,45 @@ def print_footer
   puts "Overall, we have #{@students.count} great student#{plural}"
 end
 
+def add_student(student)
+  puts "Student details accepted"
+  @students << student
+  # fix plural here
+  @students.count == 1 ? (plural = "") : (plural = "s")
+  puts "Now we have #{@students.count} student#{plural}"
+  puts "Add another student? [Y/n]"
+  input = gets.chomp 
+  input.upcase
+end
+
+def enter_category(category)
+  puts "Enter student's #{category}"
+  input = gets.chomp
+  input = :blank if input == ""
+  if category == :name || category == :height
+    input
+  else
+    input.to_sym
+  end
+end
+
+def confirm_student(student)
+  puts student
+  puts "Accept details? [Y/n]"
+  input = gets.chomp
+  input.upcase
+end
+
 def input_students
   categories = [:name, :cohort, :hobby, :country, :height]
   while true
     student = {}
     while true
-      categories.each do |category|
-        puts "Enter student's #{category}"
-        input = gets.chomp
-        input = :blank if input == "" 
-        if category == :name || category == :height
-          student[category] = input
-        else
-          student[category] = input.to_sym
-        end
-      end
-      puts student
-      puts "Accept details? [Y/n]"
-      input = gets.chomp
-      break if input.upcase != "N" 
+      categories.each { |category| student[category] = enter_category(category) }
+      break if confirm_student(student) != "N"
 
     end
-    puts "Student details accepted"
-    @students << student
-    # fix plural here
-    @students.count == 1 ? (plural = "") : (plural = "s")
-    puts "Now we have #{@students.count} student#{plural}"
-    puts "Add another student? [Y/n]"
-    input = gets.chomp
-    break if input.upcase == "N"
+    break if add_student(student) == "N"
 
   end
 end
