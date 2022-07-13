@@ -92,7 +92,28 @@ def input_students
   students
 end
 
-students = input_students
-print_header
-print_out(students)
-print_footer(students)
+def interactive_menu
+  students = []
+  while true
+    # print menu and ask user what to do
+    puts "1. Input the students"
+    puts "2. Show the students"
+    puts "9. Exit"
+    selection = gets.chomp
+    case selection
+    when "1"
+      students = input_students
+    when "2"
+      print_header
+      print_out(students)
+      print_footer(students)
+    when "9"
+      break
+
+    else
+      puts "I don't know what you meant, try again"
+    end
+  end
+end
+
+interactive_menu
