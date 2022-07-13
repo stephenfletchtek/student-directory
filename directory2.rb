@@ -61,13 +61,13 @@ def add_student(student)
   @students.count == 1 ? (plural = "") : (plural = "s")
   puts "Now we have #{@students.count} student#{plural}"
   puts "Add another student? [Y/n]"
-  input = gets.chomp 
+  input = STDIN.gets.chomp 
   input.upcase
 end
 
 def enter_category(category)
   puts "Enter student's #{category}"
-  input = gets.chomp
+  input = STDIN.gets.chomp
   input = :blank if input == ""
   if category == :name || category == :height
     input
@@ -79,7 +79,7 @@ end
 def confirm_student(student)
   puts student
   puts "Accept details? [Y/n]"
-  input = gets.chomp
+  input = STDIN.gets.chomp
   input.upcase
 end
 
@@ -96,9 +96,8 @@ def input_students
   end
 end
 
-
 def save_students
-  file = File.open("Students.csv", "w")
+  file = File.open("students.csv", "w")
   @students.each do |student|
     student_data = student.each.map { |key, value| value }
     csv_line = student_data.join(",")
@@ -107,8 +106,8 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     data = line.chomp.split(",")
     # bodge cohort, hobby and country to symbol
@@ -116,6 +115,18 @@ def load_students
     @students << Hash[@categories.zip(data)]
   end
   file.close
+end
+
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exist?(filename)
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Unable to find file: #{filename}"
+    exit
+  end
 end
 
 def print_menu
@@ -152,8 +163,9 @@ end
 def interactive_menu
   while true
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
+try_load_students
 interactive_menu
