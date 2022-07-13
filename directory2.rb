@@ -14,23 +14,25 @@
 # {name: "Norman Bates", cohort: :november, hobby: "", country: "", height: ""}
 # ]
 
+@students = []
+
 def print_header
   puts "The students of Villains Academy"
   puts "-------------"
 end
 
 # grouped by cohort for question 8
-def print_out(names)
+def print_students_list
   # q12 only print if 'students' list is not empty
-  if names.length != 0
+  if @students.length != 0
     # cohort list
-    cohort_list = names.each.map { |item| item[:cohort]}
+    cohort_list = @students.each.map { |item| item[:cohort]}
     #unique cohorts only
     cohort_list = cohort_list.uniq
     # by cohort
     cohort_list.each do |cohort|
       puts "#{cohort} cohort:"
-      names.each_with_index do |record, ind|
+      @students.each_with_index do |record, ind|
         # display if in cohort
         if record[:cohort] == cohort
           puts "#{ind + 1}. #{record[:name]}"
@@ -47,15 +49,13 @@ def print_out(names)
   end
 end
 
-def print_footer(names)
+def print_footer
   # question 9 plural - fixed to show 's' when zero too
-  names.count == 1 ? (plural = "") : (plural = "s")
-  puts "Overall, we have #{names.count} great student#{plural}"
+  @students.count == 1 ? (plural = "") : (plural = "s")
+  puts "Overall, we have #{@students.count} great student#{plural}"
 end
 
 def input_students
-  # modified for question 7
-  students = []
   categories = [:name, :cohort, :hobby, :country, :height]
   while true
     student = {}
@@ -77,42 +77,46 @@ def input_students
 
     end
     puts "Student details accepted"
-    students << student
+    @students << student
     # fix plural here
-    students.count == 1 ? (plural = "") : (plural = "s")
-    puts "Now we have #{students.count} student#{plural}"
+    @students.count == 1 ? (plural = "") : (plural = "s")
+    puts "Now we have #{@students.count} student#{plural}"
     puts "Add another student? [Y/n]"
-    # question 10 alternative to gets.chomp
-    input = gets
-    (input = input[0,input.length - 1]) if input[-1] == "\n"
+    input = gets.chomp
     break if input.upcase == "N"
 
   end
-  # return array of students
-  students
+end
+
+def print_menu
+  puts "1. Input the students"
+  puts "2. Show the students"
+  puts "9. Exit"
+end 
+
+def show_students
+  print_header
+  print_students_list
+  print_footer
+end
+
+def process(selection)
+  case selection
+    when "1"
+      input_students
+    when "2"
+      show_students
+    when "9"
+      exit
+    else
+      puts "I don't know what you mean, try again"
+  end
 end
 
 def interactive_menu
-  students = []
   while true
-    # print menu and ask user what to do
-    puts "1. Input the students"
-    puts "2. Show the students"
-    puts "9. Exit"
-    selection = gets.chomp
-    case selection
-    when "1"
-      students = input_students
-    when "2"
-      print_header
-      print_out(students)
-      print_footer(students)
-    when "9"
-      break
-
-    else
-      puts "I don't know what you meant, try again"
-    end
+    print_menu
+    process(gets.chomp)
   end
 end
 
