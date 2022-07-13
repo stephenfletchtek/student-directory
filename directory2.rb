@@ -111,6 +111,8 @@ def load_students
   file = File.open("students.csv", "r")
   file.readlines.each do |line|
     data = line.chomp.split(",")
+    # bodge cohort, hobby and country to symbol
+    data = data.each_with_index.map { |item, index| (index > 0 && index < 4) ? item.to_sym : item }
     @students << Hash[@categories.zip(data)]
   end
   file.close
