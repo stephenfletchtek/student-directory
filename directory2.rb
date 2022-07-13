@@ -21,10 +21,8 @@ end
 
 # grouped by cohort for question 8
 def print_out(names)
-  # q12 only print if some students are entered
-  do_print = false
-  names.each { |student| do_print = true if student[:name] != :blank }
-  if do_print == true
+  # q12 only print if 'students' list is not empty
+  if names.length != 0
     # cohort list
     cohort_list = names.each.map { |item| item[:cohort]}
     #unique cohorts only
@@ -50,8 +48,8 @@ def print_out(names)
 end
 
 def print_footer(names)
-  # question 9 plural
-  names.count > 1 ? (plural = "s") : (plural = "")
+  # question 9 plural - fixed to show 's' when zero too
+  names.count == 1 ? (plural = "") : (plural = "s")
   puts "Overall, we have #{names.count} great student#{plural}"
 end
 
@@ -80,7 +78,9 @@ def input_students
     end
     puts "Student details accepted"
     students << student
-    puts "Now we have #{students.count} students"
+    # fix plural here
+    students.count == 1 ? (plural = "") : (plural = "s")
+    puts "Now we have #{students.count} student#{plural}"
     puts "Add another student? [Y/n]"
     # question 10 alternative to gets.chomp
     input = gets
