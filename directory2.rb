@@ -54,26 +54,26 @@ def print_footer
   puts "Overall, we have #{@students.count} great student#{plural}"
 end
 
+def enter_category(category)
+  puts "Enter student's #{category}"
+  STDIN.gets.chomp
+end
+
+def add_hash(data)
+  # bodge cohort, hobby and country to symbol
+  data = data.each_with_index.map { |item, index| (index > 0 && index < 4) ? item.to_sym : item }
+  @students << Hash[@categories.zip(data)]
+end
+
 def add_student(student)
   puts "Student details accepted"
-  @students << student
+  add_hash(student.each.map { |key, value| value })
   # fix plural here
   @students.count == 1 ? (plural = "") : (plural = "s")
   puts "Now we have #{@students.count} student#{plural}"
   puts "Add another student? [Y/n]"
   input = STDIN.gets.chomp 
   input.upcase
-end
-
-def enter_category(category)
-  puts "Enter student's #{category}"
-  input = STDIN.gets.chomp
-  input = :blank if input == ""
-  if category == :name || category == :height
-    input
-  else
-    input.to_sym
-  end
 end
 
 def confirm_student(student)
@@ -108,12 +108,7 @@ end
 
 def load_students(filename = "students.csv")
   file = File.open(filename, "r")
-  file.readlines.each do |line|
-    data = line.chomp.split(",")
-    # bodge cohort, hobby and country to symbol
-    data = data.each_with_index.map { |item, index| (index > 0 && index < 4) ? item.to_sym : item }
-    @students << Hash[@categories.zip(data)]
-  end
+  file.readlines.each { |line| add_hash(line.chomp.split(",")) }
   file.close
 end
 
