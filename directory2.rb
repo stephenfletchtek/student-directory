@@ -1,19 +1,4 @@
-# let's put all students into an array
-# hobby, country, height
-# students = [
-# {name: "Dr. Hannibal Lecter", cohort: :november, hobby: :chess, country: :UK, height: "2m"},
-# {name: "Darth Vader", cohort: :november, hobby: "", country: "", height: ""},
-# {name: "Nurse Ratched", cohort: :november, hobby: "", country: "", height: ""},
-# {name: "Michael Corleone", cohort: :november, hobby: "", country: "", height: ""},
-# {name: "Alex DeLarge", cohort: :november, hobby: "", country: "", height: ""},
-# {name: "The Wicked Witch of the West", cohort: :november, hobby: "", country: "", height: ""},
-# {name: "Terminator", cohort: :november, hobby: "", country: "", height: ""},
-# {name: "Freddy Krueger", cohort: :november, hobby: "", country: "", height: ""},
-# {name: "The Joker", cohort: :november, hobby: "", country: "", height: ""},
-# {name: "Joffrey Baratheon", cohort: :november, hobby: "", country: "", height: ""},
-# {name: "Norman Bates", cohort: :november, hobby: "", country: "", height: ""}
-# ]
-
+# Makers student directory 
 @students = []
 @categories = [:name, :cohort, :hobby, :country, :height]
 
@@ -98,7 +83,17 @@ def input_students
   end
 end
 
-def save_students(filename = "students.csv")
+def check_filename(filename)
+  if filename.nil? || filename == ""
+    puts "Use default filename 'students.csv'"
+    "students.csv"
+  else
+    filename
+  end
+end
+
+def save_students(filename)
+  filename = check_filename(filename)
   file = File.open(filename, "w")
   @students.each do |student|
     student_data = student.each.map { |key, value| value }
@@ -109,22 +104,9 @@ def save_students(filename = "students.csv")
   puts "#{filename} saved!"
 end
 
-def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-    add_hash(Hash[@categories.zip(line.chomp.split(","))])
-  end
-  file.close
-  puts "#{filename} loaded."
-end
-
-def try_load_students
-  filename = ARGV.first
-  # return if filename.nil?
-  if filename.nil?
-    load_students("students.csv")
-    puts "Loaded default file #{filename}"
-  elsif File.exist?(filename)
+def try_load_students(filename)
+  filename = check_filename(filename)
+  if File.exist?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
   else
@@ -133,11 +115,20 @@ def try_load_students
   end
 end
 
+def load_students(filename)
+  file = File.open(filename, "r")
+  @students = []
+  file.readlines.each do |line|
+    add_hash(Hash[@categories.zip(line.chomp.split(","))])
+  end
+  file.close
+end
+
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save this list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save this list to file"
+  puts "4. Load a list from file"
   puts "9. Exit"
 end 
 
@@ -155,9 +146,11 @@ def process(selection)
     when "2"
       show_students
     when "3"
-      save_students
+      puts "Enter filename to create:"
+      save_students(gets.chomp)
     when "4"
-      load_students
+      puts "Enter filename to load:"
+      try_load_students(gets.chomp)
     when "9"
       puts "Goodbye!"
       exit
@@ -173,5 +166,5 @@ def interactive_menu
   end
 end
 
-try_load_students
+try_load_students(ARGV.first)
 interactive_menu
