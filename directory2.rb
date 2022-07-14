@@ -61,13 +61,15 @@ end
 
 def add_hash(data)
   # bodge cohort, hobby and country to symbol
-  data = data.each_with_index.map { |item, index| (index > 0 && index < 4) ? item.to_sym : item }
-  @students << Hash[@categories.zip(data)]
+  data.each do |key, value|
+    (key == :name || key == :height) ? (data[key] = value) : (data[key] = value.to_sym)
+  end
+  @students << data
 end
 
 def add_student(student)
   puts "Student details accepted"
-  add_hash(student.each.map { |key, value| value })
+  add_hash(student)
   # fix plural here
   @students.count == 1 ? (plural = "") : (plural = "s")
   puts "Now we have #{@students.count} student#{plural}"
@@ -108,7 +110,9 @@ end
 
 def load_students(filename = "students.csv")
   file = File.open(filename, "r")
-  file.readlines.each { |line| add_hash(line.chomp.split(",")) }
+  file.readlines.each do |line|
+    add_hash(Hash[@categories.zip(line.chomp.split(","))])
+  end
   file.close
 end
 
