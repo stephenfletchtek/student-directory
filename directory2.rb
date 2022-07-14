@@ -94,13 +94,11 @@ end
 
 def save_students(filename)
   filename = check_filename(filename)
-  file = File.open(filename, "w")
-  @students.each do |student|
-    student_data = student.each.map { |key, value| value }
-    csv_line = student_data.join(",")
-    file.puts csv_line
+  File.open(filename, 'w') do |f|
+    @students.each do |student|
+      f.puts(student.each.map { |key, value| value }.join(","))
+    end
   end
-  file.close
   puts "#{filename} saved!"
 end
 
@@ -116,12 +114,12 @@ def try_load_students(filename)
 end
 
 def load_students(filename)
-  file = File.open(filename, "r")
   @students = []
-  file.readlines.each do |line|
-    add_hash(Hash[@categories.zip(line.chomp.split(","))])
+  File.open(filename, 'r') do |f|
+    f.readlines.each do |line|
+      add_hash(Hash[@categories.zip(line.chomp.split(","))])
+    end
   end
-  file.close
 end
 
 def print_menu
