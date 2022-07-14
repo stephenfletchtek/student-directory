@@ -98,14 +98,15 @@ def input_students
   end
 end
 
-def save_students
-  file = File.open("students.csv", "w")
+def save_students(filename = "students.csv")
+  file = File.open(filename, "w")
   @students.each do |student|
     student_data = student.each.map { |key, value| value }
     csv_line = student_data.join(",")
     file.puts csv_line
   end
   file.close
+  puts "#{filename} saved!"
 end
 
 def load_students(filename = "students.csv")
@@ -114,6 +115,7 @@ def load_students(filename = "students.csv")
     add_hash(Hash[@categories.zip(line.chomp.split(","))])
   end
   file.close
+  puts "#{filename} loaded."
 end
 
 def try_load_students
@@ -140,6 +142,7 @@ def print_menu
 end 
 
 def show_students
+  puts "#{@students.length} students found."
   print_header
   print_students_list
   print_footer
@@ -156,6 +159,7 @@ def process(selection)
     when "4"
       load_students
     when "9"
+      puts "Goodbye!"
       exit
     else
       puts "I don't know what you mean, try again"
