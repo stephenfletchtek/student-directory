@@ -114,8 +114,11 @@ end
 
 def try_load_students
   filename = ARGV.first
-  return if filename.nil?
-  if File.exist?(filename)
+  # return if filename.nil?
+  if filename.nil?
+    load_students("students.csv")
+    puts "Loaded default file #{filename}"
+  elsif File.exist?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
   else
