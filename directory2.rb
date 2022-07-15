@@ -1,4 +1,6 @@
-# Makers student directory 
+# Makers student directory
+require 'csv'
+
 @students = []
 @categories = [:name, :cohort, :hobby, :country, :height]
 
@@ -94,9 +96,9 @@ end
 
 def save_students(filename)
   filename = check_filename(filename)
-  File.open(filename, 'w') do |f|
+  CSV.open(filename, 'w') do |csv|
     @students.each do |student|
-      f.puts(student.each.map { |key, value| value }.join(","))
+      csv << student.each.map { |key, value| value }
     end
   end
   puts "#{filename} saved!"
@@ -115,10 +117,9 @@ end
 
 def load_students(filename)
   @students = []
-  File.open(filename, 'r') do |f|
-    f.readlines.each do |line|
-      add_hash(Hash[@categories.zip(line.chomp.split(","))])
-    end
+  data = CSV.read(filename)
+  data.each do |line|
+    add_hash(Hash[@categories.zip(line)])
   end
 end
 
@@ -158,11 +159,11 @@ def process(selection)
 end
 
 def interactive_menu
+  try_load_students(ARGV.first)
   while true
     print_menu
     process(STDIN.gets.chomp)
   end
 end
 
-try_load_students(ARGV.first)
 interactive_menu
